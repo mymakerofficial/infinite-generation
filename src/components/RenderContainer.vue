@@ -4,12 +4,16 @@
     ondragstart="return false;"
     ondrop="return false;"
   >
-    <div :style="{ transform: `translate(${xOffset}px, ${yOffset}px)` }">
+    <div
+      :style="{ transform: `translate(${viewXOffset}px, ${viewYOffset}px)` }"
+    >
       <div v-for="gridX in grid" :key="gridX">
         <div v-for="tile in gridX" :key="tile">
           <RenderSquare
-            :x="tile.x - (gridWidth / 2) * tileWidth"
-            :y="tile.y - (gridHeight / 2) * tileHeight"
+            :x="tile.x"
+            :y="tile.y"
+            :gridX="tile.x - gridXOffset * tileWidth"
+            :gridY="tile.y - gridYOffset * tileHeight"
             :width="tileWidth"
             :height="tileHeight"
             :renderScale="renderScale"
@@ -53,6 +57,16 @@ export default {
     },
     gridYOffset() {
       return -Math.floor(this.yOffset / this.tileHeight);
+    },
+    viewXOffset() {
+      return (
+        this.gridXOffset * this.tileWidth + this.xOffset - this.totalWidth / 2
+      );
+    },
+    viewYOffset() {
+      return (
+        this.gridYOffset * this.tileHeight + this.yOffset - this.totalHeight / 2
+      );
     },
     totalWidth() {
       return this.tileWidth * this.gridWidth;
@@ -217,6 +231,9 @@ export default {
     fGridInfo.addSeparator();
     fGridInfo.addMonitor(this, "gridXOffset", { interval: 100 });
     fGridInfo.addMonitor(this, "gridYOffset", { interval: 100 });
+    fGridInfo.addSeparator();
+    fGridInfo.addMonitor(this, "viewXOffset");
+    fGridInfo.addMonitor(this, "viewYOffset");
     fGridInfo.addSeparator();
     fGridInfo.addMonitor(this, "rollX", { interval: 100 });
     fGridInfo.addMonitor(this, "rollY", { interval: 100 });

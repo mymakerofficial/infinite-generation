@@ -1,7 +1,7 @@
 <template>
   <div
     :style="{
-      transform: `translate(${x - width / 2}px, ${y - height / 2}px)`,
+      transform: `translate(${gridX}px, ${gridY}px)`,
       width: `${width}px`,
       height: `${height}px`,
       /*background: `url('${imageUrl}') 0% 0% / cover`,*/
@@ -32,7 +32,7 @@
 export default {
   name: "RenderSquare",
 
-  props: ["x", "y", "width", "height", "renderScale"],
+  props: ["x", "y", "gridX", "gridY", "width", "height", "renderScale"],
 
   data() {
     return {
@@ -69,24 +69,16 @@ export default {
           // calculate pixel index
           let p = i / 4;
           // calculate relative pixel coordinate
-          let x = p % canvas.width;
-          let y = Math.round(p / canvas.height);
+          let x = (p % canvas.width) * this.renderScale;
+          let y = Math.round(p / canvas.height) * this.renderScale;
           // calculate absolute pixel coordinate, relative to complete image
           let aX = x + this.x;
           let aY = y + this.y;
 
           // Modify pixel data
-          imageData.data[i] =
-            ((Math.cos((aY / (canvas.height * 4)) * this.renderScale) + 1) /
-              2) *
-            255; // R value
-          imageData.data[i + 1] =
-            ((Math.sin((aX / (canvas.width * 4)) * this.renderScale) + 1) / 2) *
-            255; // G value
-          imageData.data[i + 2] =
-            ((Math.sin((aY / (canvas.height * 4)) * this.renderScale) + 1) /
-              2) *
-            255; // B value
+          imageData.data[i] = ((Math.cos(aY / 400) + 1) / 2) * 255; // R value
+          imageData.data[i + 1] = ((Math.sin(aX / 400) + 1) / 2) * 255; // G value
+          imageData.data[i + 2] = ((Math.sin(aY / 400) + 1) / 2) * 255; // B value
           imageData.data[i + 3] = 255; // A value
         }
 
@@ -94,7 +86,7 @@ export default {
         ctx.putImageData(imageData, 0, 0);
 
         this.loading = false;
-      }, Math.random() * 100);
+      }, Math.random() * 10);
     },
   },
 
