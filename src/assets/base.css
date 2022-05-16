@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
   --vt-c-white: #ffffff;
@@ -94,4 +96,19 @@ body {
   position: absolute;
   top: 50vh;
   left: 50vw;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.TileInfoText {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  font-family: 'Roboto Mono', monospace;
+  color: hsl(0, 0%, 98%);
+  text-shadow: 2px 2px #282828;
 }
